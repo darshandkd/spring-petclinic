@@ -1,6 +1,6 @@
 node {
-  environment {
-      BUILD_NUMBER = '1.0.0'
+  tools {
+    jdk ‘jdk17' 
   }
   
   //Clone spring-petclinic project from GitHub repository
