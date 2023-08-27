@@ -2,7 +2,7 @@ pipeline {
   tools {
     jdk 'jdk17' 
   }
-  
+  stages {
   //Clone spring-petclinic project from GitHub repository
   stage('Clone repo') {
     git branch: 'master',
@@ -43,4 +43,5 @@ pipeline {
       }"""
     server.upload(uploadSpec)
    }
+  }
 }
