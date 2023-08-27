@@ -5,7 +5,7 @@ node {
   
   //Clone spring-petclinic project from GitHub repository
   stage('Clone repo') {
-    git branch: 'master',
+    git branch: 'jenkins-workspace',
         url:    'https://github.com/darshandkd/spring-petclinic.git'
   }
   
