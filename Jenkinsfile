@@ -2,7 +2,7 @@ pipeline {
   tools {
     jdk 'jdk17' 
   }
-  agent none
+  agent any
   stages {
   //Clone spring-petclinic project from GitHub repository
   stage('Clone repo') {
