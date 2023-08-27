@@ -1,6 +1,6 @@
 node {
   tools {
-  jdk ‘jdk17' 
+  jdk 'jdk17' 
   }
   //Clone spring-petclinic project from GitHub repository
   stage('Clone repo') {
