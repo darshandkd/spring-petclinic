@@ -1,5 +1,3 @@
-import org.jfrog.hudson.pipeline.Artifactory
-
 node {
   environment {
       BUILD_NUMBER = '1.0.0'
@@ -33,8 +31,7 @@ node {
   }
   
   stage('Publish to jFrog-artifactory'){ 
-//   def server = Artifactory.newServer url: 'ARTIFACTORY_URL', username: 'ARTIFACTORY_USER_NAME', password: 'ARTIFACTORY_PASSWORD'
-   def server = Artifactory.server('https://darshandkd.jfrog.io')
+   def server = Artifactory.newServer url: 'ARTIFACTORY_URL', username: 'ARTIFACTORY_USER_NAME', password: 'ARTIFACTORY_PASSWORD'
    def uploadSpec = """{
        "files": [
             { 
