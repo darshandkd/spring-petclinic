@@ -40,20 +40,15 @@ pipeline {
     sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=pet-clinic-container-image'  
   }
   }
-//  stage('Publish to jFrog-artifactory'){ 
-//    steps {
-//   def server = Artifactory.newServer url: 'ARTIFACTORY_URL', username: 'ARTIFACTORY_USER_NAME', password: 'ARTIFACTORY_PASSWORD'
-//   def uploadSpec = """{
-//       "files": [
-//            { 
-//              "pattern": "target/*.jar",
-//              "target" : "ARTIFACTORY_TARGET_REPO",
-//              "props"  : "Unit-Tested=Yes"
-//            }
-//        ]
-//      }"""
-//    server.upload(uploadSpec)
-//    }
-//   }
+        stage ('Push Image to Artifactory') {
+            steps {
+                rtDockerPush(
+                    serverId: "darshan-artifactory",
+                    image: "darshandkd.jfrog.io/docker/" + "pet-clinic:1.0.${env.BUILD_NUMBER}",
+                    targetRepo: 'dkd-spring-petclinic',
+                    properties: 'project-name=spring-petclinic;status=stable'
+                )
+            }
+        }
 }
 }
