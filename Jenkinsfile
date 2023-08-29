@@ -37,7 +37,8 @@ pipeline {
   //Create pet-clinic application image
   stage('Build image - mvnw'){
     steps {
-    sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=pet-clinic-container-image'  
+    sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=pet-clinic-container-image'
+    cp target/spring-petclinic-*.jar /usr/bin/spring-petclinic.jar
   }
   }
   stage('Publish to jFrog-artifactory'){ 
