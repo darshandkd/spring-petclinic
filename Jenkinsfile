@@ -37,14 +37,14 @@ pipeline {
   //Create pet-clinic application image
   stage('Build image - mvnw'){
     steps {
-    sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=darshandkd.jfrog.io/docker/pet-clinic-container-image'  
+    sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=darshandkd.jfrog.io/dkd-spring-petclinic-docker/pet-clinic-container-image'  
   }
   }
     stage('Push Image to Artifactory') {
             steps {
                 script {
                     docker.withRegistry('https://darshandkd.jfrog.io', 'darshan-artifactory') {
-                        def customImage = docker.image("darshandkd.jfrog.io/docker/pet-clinic-container-image")
+                        def customImage = docker.image("darshandkd.jfrog.io/dkd-spring-petclinic-docker/pet-clinic-container-image")
                         customImage.push("${env.BUILD_NUMBER}")
                     }
                 }
