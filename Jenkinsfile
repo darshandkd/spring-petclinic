@@ -37,18 +37,28 @@ pipeline {
   //Create pet-clinic application image
   stage('Build image - mvnw'){
     steps {
-    sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=pet-clinic-container-image'  
+    sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=darshandkd.jfrog.io/docker/pet-clinic-container-image'  
   }
   }
         stage ('Push Image to Artifactory') {
             steps {
                 rtDockerPush(
                     serverId: "darshan-artifactory",
-                    image: "darshandkd.jfrog.io/docker/" + "pet-clinic:1.0.${env.BUILD_NUMBER}",
+                    image: "darshandkd.jfrog.io/docker/" + "pet-clinic-container-image",
                     targetRepo: 'dkd-spring-petclinic',
                     properties: 'project-name=spring-petclinic;status=stable'
                 )
             }
         }
 }
+  // stage ('Setup JFrog CLI') {
+  //           steps {
+  //               withCredentials([[$class:'UsernamePasswordMultiBinding', credentialsId: 'admin.jfrog', usernameVariable:'ARTIFACTORY_USER', passwordVariable:'ARTIFACTORY_PASS']]) {
+  //                    sh '''
+  //                       ./jfrog rt config --url=https://darshandkd.jfrog.io/artifactory --dist-url=https://darshandkd.jfrog.io/distribution --interactive=false --user=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASS}
+  //                       ./jfrog rt ping
+  //                    '''
+  //                }
+  //           }
+  //       }
 }
