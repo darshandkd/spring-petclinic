@@ -40,19 +40,30 @@ pipeline {
     sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=darshandkd.jfrog.io/docker/pet-clinic-container-image'  
   }
   }
-        stage ('Push Image to Artifactory') {
+    stage('Push Image to Artifactory') {
             steps {
-  // docker login darshandkd.jfrog.io -u $ARTIFACTORY_USER -p $ARTIFACTORY_PASSWD
-                rtDockerPush(
-                    serverId: "darshan-artifactory",
-                    image: "darshandkd.jfrog.io/docker/" + "pet-clinic-container-image",
-                    targetRepo: 'dkd-spring-petclinic',
-                    properties: 'project-name=spring-petclinic;status=stable'
-                )
+                script {
+                    docker.withRegistry('https://darshandkd.jfrog.io', 'darshan-artifactory') {
+                        def customImage = docker.image("darshandkd.jfrog.io/docker/pet-clinic-container-image")
+                        customImage.push("${env.BUILD_NUMBER}")
+                    }
+                }
             }
         }
 
-}
+//         stage ('Push Image to Artifactory') {
+//             steps {
+//   // docker login darshandkd.jfrog.io -u $ARTIFACTORY_USER -p $ARTIFACTORY_PASSWD
+//                 rtDockerPush(
+//                     serverId: "darshan-artifactory",
+//                     image: "darshandkd.jfrog.io/docker/" + "pet-clinic-container-image",
+//                     targetRepo: 'dkd-spring-petclinic',
+//                     properties: 'project-name=spring-petclinic;status=stable'
+//                 )
+//             }
+//         }
+
+// }
   // stage ('Setup JFrog CLI') {
   //           steps {
   //               withCredentials([[$class:'UsernamePasswordMultiBinding', credentialsId: 'admin.jfrog', usernameVariable:'ARTIFACTORY_USER', passwordVariable:'ARTIFACTORY_PASS']]) {
