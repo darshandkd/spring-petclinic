@@ -15,7 +15,9 @@ pipeline {
   //run mvn wrapper for build, install and package
   stage('Build') {
     steps {
-    sh './mvnw -B -DskipTests clean'
+    sh './mvnw -B -DskipTests clean',
+    sh 'cp target/spring-petclinic-*.jar /usr/bin/spring-petclinic.jar'
+      
   }
   }
     
@@ -38,7 +40,6 @@ pipeline {
   stage('Build image - mvnw'){
     steps {
     sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=pet-clinic-container-image'
-    cp target/spring-petclinic-*.jar /usr/bin/spring-petclinic.jar
   }
   }
   stage('Publish to jFrog-artifactory'){ 
