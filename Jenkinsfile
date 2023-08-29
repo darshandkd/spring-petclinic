@@ -50,29 +50,5 @@ pipeline {
                 }
             }
         }
-
-//         stage ('Push Image to Artifactory') {
-//             steps {
-//   // docker login darshandkd.jfrog.io -u $ARTIFACTORY_USER -p $ARTIFACTORY_PASSWD
-//                 rtDockerPush(
-//                     serverId: "darshan-artifactory",
-//                     image: "darshandkd.jfrog.io/docker/" + "pet-clinic-container-image",
-//                     targetRepo: 'dkd-spring-petclinic',
-//                     properties: 'project-name=spring-petclinic;status=stable'
-//                 )
-//             }
-//         }
-
-// }
-  // stage ('Setup JFrog CLI') {
-  //           steps {
-  //               withCredentials([[$class:'UsernamePasswordMultiBinding', credentialsId: 'admin.jfrog', usernameVariable:'ARTIFACTORY_USER', passwordVariable:'ARTIFACTORY_PASS']]) {
-  //                    sh '''
-  //                       ./jfrog rt config --url=https://darshandkd.jfrog.io/artifactory --dist-url=https://darshandkd.jfrog.io/distribution --interactive=false --user=${ARTIFACTORY_USER} --password=${ARTIFACTORY_PASS}
-  //                       ./jfrog rt ping
-  //                    '''
-  //                }
-  //           }
-  //       }
 }
 }
