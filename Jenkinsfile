@@ -15,8 +15,7 @@ pipeline {
   //run mvn wrapper for build, install and package
   stage('Build') {
     steps {
-    sh './mvnw -B -DskipTests compile'
-    sh 'cp target/spring-petclinic-*.jar /usr/bin/spring-petclinic.jar'
+    sh './mvnw -B -DskipTests clean'
   }
   }
     
@@ -32,6 +31,7 @@ pipeline {
   stage('Bundle app') {
     steps {
     sh './mvnw package'
+    sh 'cp target/spring-petclinic-*.jar /usr/bin/spring-petclinic.jar'
     }
   }
   
