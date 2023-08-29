@@ -52,7 +52,7 @@ pipeline {
                 )
             }
         }
-        }
+
 }
   // stage ('Setup JFrog CLI') {
   //           steps {
