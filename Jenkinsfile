@@ -1,7 +1,6 @@
 pipeline {
   tools {
     jdk 'jdk17'
-    // jfrog 'jfrog-cli'
   }
   agent any
   stages {
@@ -16,6 +15,8 @@ pipeline {
   stage('Build') {
     steps {
     sh './mvnw -B -DskipTests clean'
+    sh 'cp target/spring-petclinic-*.jar /usr/bin/spring-petclinic.jar'
+      
   }
   }
     
@@ -50,5 +51,7 @@ pipeline {
                 }
             }
         }
+}
+
 }
 }
