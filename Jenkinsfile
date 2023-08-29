@@ -42,7 +42,6 @@ pipeline {
   }
         stage ('Push Image to Artifactory') {
             steps {
-              keepEnv(['ARTIFACTORY_USER', 'ARTIFACTORY_PASSWD']) {
   docker login darshandkd.jfrog.io -u $ARTIFACTORY_USER -p $ARTIFACTORY_PASSWD
                 rtDockerPush(
                     serverId: "darshan-artifactory",
@@ -51,7 +50,6 @@ pipeline {
                     properties: 'project-name=spring-petclinic;status=stable'
                 )
             }
-        }
         }
 
 }
