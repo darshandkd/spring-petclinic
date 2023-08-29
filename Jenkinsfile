@@ -31,7 +31,6 @@ pipeline {
   stage('Bundle app') {
     steps {
     sh './mvnw package'
-    sh 'cp target/spring-petclinic-*.jar /usr/bin/spring-petclinic.jar'
     }
   }
   
