@@ -40,5 +40,20 @@ pipeline {
     sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=pet-clinic-container-image'  
   }
   }
+  stage('Publish to jFrog-artifactory'){ 
+    steps {
+   def server = Artifactory.newServer url: 'ARTIFACTORY_URL', username: 'ARTIFACTORY_USER_NAME', password: 'ARTIFACTORY_PASSWORD'
+   def uploadSpec = """{
+       "files": [
+            { 
+              "pattern": "target/*.jar",
+              "target" : "ARTIFACTORY_TARGET_REPO",
+              "props"  : "Unit-Tested=Yes"
+            }
+        ]
+      }"""
+    server.upload(uploadSpec)
+    }
+   }
 }
 }
