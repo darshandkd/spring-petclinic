@@ -50,3 +50,4 @@ node {
     server.upload(uploadSpec)
    }
 }
+}
