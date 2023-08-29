@@ -1,7 +1,9 @@
-tools {
-  jdk 'jdk17',
-  jfrog 'jfrog-cli'
+pipeline {
+  tools {
+    jdk 'jdk17',
+    jfrog 'jfrog-cli'
   }
+  agent any
 node {
   environment {
       BUILD_NUMBER = '1.0.0'
