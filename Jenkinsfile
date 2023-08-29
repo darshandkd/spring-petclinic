@@ -1,6 +1,6 @@
 pipeline {
   tools {
-    jdk 'jdk17'
+    jdk 'jdk17',
     jfrog 'jfrog-cli'
   }
   agent any
