@@ -7,7 +7,7 @@ pipeline {
   //Clone spring-petclinic project from GitHub repository
   stage('Clone repo') {
     steps {
-    git branch: 'master',
+    git branch: 'main',
         url:    'https://github.com/darshandkd/spring-petclinic.git'
   }
   }
