@@ -59,7 +59,7 @@ pipeline {
 
   stage('Scan and push image') {
       steps {
-				dir('/workspace/spring-petclinic') {
+				dir('/workspace/jFrog-demo') {
 					// Scan Docker image for vulnerabilities
 					jf 'docker scan $DOCKER_IMAGE_NAME'
 
