@@ -39,7 +39,7 @@ pipeline {
     sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=darshandkd.jfrog.io/dkd-spring-petclinic-docker/pet-clinic-container-image'  
   }
   }
-    stage('Push Image to Artifactory') {
+/*    stage('Push Image to Artifactory') {
             steps {
                 script {
                     docker.withRegistry('https://darshandkd.jfrog.io', 'darshan-artifactory') {
@@ -49,5 +49,25 @@ pipeline {
                 }
             }
         }
+*/
+
+  stage('Scan and push image') {
+      steps {
+				dir('docker-oci-examples/docker-example/') {
+					// Scan Docker image for vulnerabilities
+					jf 'docker scan $DOCKER_IMAGE_NAME'
+
+					// Push image to Artifactory
+					jf 'docker push $DOCKER_IMAGE_NAME'
+				}
+			}
+		}
+
+		stage('Publish build info') {
+			steps {
+				jf 'rt build-publish'
+			}
+		}
+
 }
 }
