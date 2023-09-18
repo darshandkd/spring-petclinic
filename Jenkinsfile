@@ -1,13 +1,11 @@
 pipeline {
   tools {
-    jdk 'jdk17'
+    //jdk 'jdk17'
     jfrog 'jfrog-cli'
   }
   agent any
   environment {
-		DOCKER_IMAGE_NAME = "darshankd.jfrog.io/dkd-spring-petclinic-docker/pet-clinic-container-image"
-    //DOCKER_IMAGE_NAME = "darshankd.jfrog.io/docker-local/hello-frog:1.0.0"
-	}
+		DOCKER_IMAGE_NAME = "darshankd.jfrog.io/dkd-spring-petclinic-docker/pet-clinic-container-image"	}
   stages {
   //Clone spring-petclinic project from GitHub repository
   stage('Clone repo') {
@@ -41,21 +39,9 @@ pipeline {
   //Create pet-clinic application image
   stage('Build image - mvnw'){
     steps {
-    //sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=darshandkd.jfrog.io/dkd-spring-petclinic-docker/pet-clinic-container-image'  
     sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=$DOCKER_IMAGE_NAME'  
   }
   }
-/*    stage('Push Image to Artifactory') {
-            steps {
-                script {
-                    docker.withRegistry('https://darshandkd.jfrog.io', 'darshan-artifactory') {
-                        def customImage = docker.image("darshandkd.jfrog.io/dkd-spring-petclinic-docker/pet-clinic-container-image")
-                        customImage.push("${env.BUILD_NUMBER}")
-                    }
-                }
-            }
-        }
-*/
 
   stage('Scan and push image') {
       steps {
