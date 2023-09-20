@@ -30,6 +30,14 @@ pipeline {
                 junit 'target/surefire-reports/*.xml'
             }
         }
+        stage('OWASP Dependency Check') {
+            steps {
+                script {
+                    // Run the OWASP Dependency-Check
+                    dependencyCheck additionalArguments: '--failOnCVSS 5' // This will fail the build if a CVSS score of 5 or higher is found
+                }
+            }
+        }
 
         stage('Bundle app') {
             steps {
