@@ -34,8 +34,8 @@ pipeline {
         stage('OWASP Check-1') {
             steps {
                     // Run the OWASP Dependency-Check
-                    dependencyCheck additionalArguments: "-s './' -f 'XML' --failOnCVSS 5 --prettyPrint -o 'dependency-check-2-report.xml'", odcInstallation: "OWASP" // This will fail the build if a CVSS score of 5 or higher is found
-                    dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+                    dependencyCheck additionalArguments: "-s './' -f 'XML' --failOnCVSS 5 --prettyPrint -o 'dependency-check-1-report.xml'", odcInstallation: "OWASP" // This will fail the build if a CVSS score of 5 or higher is found
+                    dependencyCheckPublisher pattern: 'dependency-check-1-report.xml'
             }
         }
         stage('Bundle app') {
@@ -54,7 +54,7 @@ pipeline {
             steps {
                     // Run the OWASP Dependency-Check
                     dependencyCheck additionalArguments: "-s './' -f 'XML' --failOnCVSS 5 --prettyPrint -o 'dependency-check-2-report.xml'", odcInstallation: "OWASP" // This will fail the build if a CVSS score of 5 or higher is found
-                    dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+                    dependencyCheckPublisher pattern: 'dependency-check-2-report.xml'
             }
         }
 
