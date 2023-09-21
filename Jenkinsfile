@@ -31,26 +31,13 @@ pipeline {
             }
         }
         
-        stage('OWASP Dependency Check') {
+        stage('OWASP Check-1') {
             steps {
                     // Run the OWASP Dependency-Check
-                    dependencyCheck additionalArguments: "-s './' -f 'ALL' --failOnCVSS 5 --prettyPrint", odcInstallation: "OWASP" // This will fail the build if a CVSS score of 5 or higher is found
+                    dependencyCheck additionalArguments: "-s './' -f 'XML' --failOnCVSS 5 --prettyPrint -o 'dependency-check-2-report.xml'", odcInstallation: "OWASP" // This will fail the build if a CVSS score of 5 or higher is found
                     dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         }
-        
-    // stage('OWASP Dependency-Check Vulnerabilities') {
-    //   steps {
-    //     dependencyCheck additionalArguments: ''' 
-    //                 -o './'
-    //                 -s './'
-    //                 -f 'ALL' 
-    //                 --prettyPrint''', odcInstallation: 'OWASP'
-        
-    //     dependencyCheckPublisher pattern: 'dependency-check-report.xml'
-    //   }
-    // }
-
         stage('Bundle app') {
             steps {
                 sh './mvnw package'
@@ -60,6 +47,14 @@ pipeline {
         stage('Build image - mvnw') {
             steps {
                 sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=$DOCKER_IMAGE_NAME'
+            }
+        }
+        
+        stage('OWASP Check-2') {
+            steps {
+                    // Run the OWASP Dependency-Check
+                    dependencyCheck additionalArguments: "-s './' -f 'XML' --failOnCVSS 5 --prettyPrint -o 'dependency-check-2-report.xml'", odcInstallation: "OWASP" // This will fail the build if a CVSS score of 5 or higher is found
+                    dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         }
 
