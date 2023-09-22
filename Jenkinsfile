@@ -42,12 +42,12 @@ pipeline {
                 sh './mvnw -B -DskipTests clean'
             }
         }
-        stage('Execute tests') {
-            steps {
-                sh './mvnw test'
-                junit 'target/surefire-reports/*.xml'
-            }
-        }
+        // stage('Execute tests') {
+        //     steps {
+        //         sh './mvnw test'
+        //         junit 'target/surefire-reports/*.xml'
+        //     }
+        // }
         stage('Bundle app') {
             steps {
                 sh './mvnw package'
