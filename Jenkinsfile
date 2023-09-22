@@ -8,7 +8,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE_NAME = "darshankd.jfrog.io/dkd-spring-petclinic-docker/pet-clinic-container-image"
-        SERVER_ID = "darshankd"
+        // SERVER_ID = "darshankd"
     }
 
     stages {
@@ -23,7 +23,7 @@ pipeline {
             //buildInfo = Artifactory.newBuildInfo()
             steps {
                 script {
-                    server = Artifactory.server(SERVER_ID)
+                    // server = Artifactory.server(SERVER_ID)
                     buildInfo = Artifactory.newBuildInfo()
                 }
             }
@@ -31,7 +31,7 @@ pipeline {
         stage ('Publish x-ray info') {
             steps {
                 script {
-                    server = Artifactory.server(SERVER_ID)
+                    // server = Artifactory.server(SERVER_ID)
                     buildInfo = Artifactory.newBuildInfo()
                     server.publishBuildInfo buildInfo
                 }
@@ -81,7 +81,8 @@ pipeline {
         stage ('Xray scan') {
             steps {
                 script {
-                    server = Artifactory.server(SERVER_ID)
+                    // server = Artifactory.server(SERVER_ID)
+                    serverId :   "server",
                     buildInfo = Artifactory.newBuildInfo()
                     def scanConfig = [
                         'buildName'      : buildInfo.name,
