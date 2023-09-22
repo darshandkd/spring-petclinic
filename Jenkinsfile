@@ -28,7 +28,7 @@ pipeline {
                 }
             }
         }
-        stage ('Publish build info') {
+        stage ('Publish x-ray info') {
             steps {
                 script {
                     server = Artifactory.server(SERVER_ID)
