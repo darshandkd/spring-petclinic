@@ -8,7 +8,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE_NAME = "darshankd.jfrog.io/dkd-spring-petclinic-docker/pet-clinic-container-image"
-        // SERVER_ID = "darshankd"
+        SERVER_ID = "darshankd"
     }
 
     stages {
