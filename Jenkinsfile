@@ -56,7 +56,7 @@ pipeline {
 
         stage('Build image') {
             steps {
-                sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=$DOCKER_IMAGE_NAME:$env.BUILD_NUMBER'
+                sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=$DOCKER_IMAGE_NAME -Dspring-boot.build-image.imageTag=$env.BUILD_NUMBER'
             }
         }
         
