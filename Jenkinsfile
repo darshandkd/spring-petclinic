@@ -73,7 +73,7 @@ pipeline {
                 dir('jFrog-demo') {
                     // Scan Docker image for vulnerabilities
                     jf "docker scan $DOCKER_IMAGE_NAME"
-                    jf "docker tag $DOCKER_IMAGE_NAME $DOCKER_IMAGE_NAME:$env.BUILD_NUMBER"
+                    jf "docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:$env.BUILD_NUMBER"
                     // Push image to Artifactory
                     jf "docker push $DOCKER_IMAGE_NAME:$env.BUILD_NUMBER"
                 }
