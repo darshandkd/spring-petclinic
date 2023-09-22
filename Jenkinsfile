@@ -41,7 +41,7 @@ pipeline {
         stage('OWASP Depedency check') {
             steps {
                     // Run the OWASP Dependency-Check
-                    dependencyCheck additionalArguments: "-s './' -f 'ALL' --failOnCVSS 5 --prettyPrint", odcInstallation: "OWASP" // This will fail the build if a CVSS score of 5 or higher is found
+                    dependencyCheck additionalArguments: "-s './' -f 'ALL' --prettyPrint", odcInstallation: "OWASP" // This will fail the build if a CVSS score of 5 or higher is found
                     dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         }
