@@ -18,25 +18,25 @@ pipeline {
                     url: 'https://github.com/darshandkd/spring-petclinic.git'
             }
         }
-        stage ('Artifactory configuration') {
-            // server = Artifactory.server SERVER_ID
-            //buildInfo = Artifactory.newBuildInfo()
-            steps {
-                script {
-                    // server = Artifactory.server(SERVER_ID)
-                    buildInfo = Artifactory.newBuildInfo()
-                }
-            }
-        }
-        stage ('Publish x-ray info') {
-            steps {
-                script {
-                    // server = Artifactory.server(SERVER_ID)
-                    buildInfo = Artifactory.newBuildInfo()
-                    // server.publishBuildInfo buildInfo
-                }
-            }
-        }
+        // stage ('Artifactory configuration') {
+        //     // server = Artifactory.server SERVER_ID
+        //     //buildInfo = Artifactory.newBuildInfo()
+        //     steps {
+        //         script {
+        //             // server = Artifactory.server(SERVER_ID)
+        //             buildInfo = Artifactory.newBuildInfo()
+        //         }
+        //     }
+        // }
+        // stage ('Publish x-ray info') {
+        //     steps {
+        //         script {
+        //             // server = Artifactory.server(SERVER_ID)
+        //             buildInfo = Artifactory.newBuildInfo()
+        //             // server.publishBuildInfo buildInfo
+        //         }
+        //     }
+        // }
         stage('Build') {
             steps {
                 sh './mvnw -B -DskipTests clean'
@@ -78,22 +78,22 @@ pipeline {
                 }
             }
         }
-        stage ('Xray scan') {
-            steps {
-                script {
-                    // server = Artifactory.server(SERVER_ID)
-                    serverId =   "server"
-                    buildInfo = Artifactory.newBuildInfo()
-                    def scanConfig = [
-                        'buildName'      : buildInfo.name,
-                        'buildNumber'    : buildInfo.number,
-                        'failBuild'      : true
-                    ]
-                    def scanResult = server.xrayScan scanConfig
-                    echo scanResult as String
-                }
-            }
-        }
+        // stage ('Xray scan') {
+        //     steps {
+        //         script {
+        //             // server = Artifactory.server(SERVER_ID)
+        //             serverId =   "server"
+        //             buildInfo = Artifactory.newBuildInfo()
+        //             def scanConfig = [
+        //                 'buildName'      : buildInfo.name,
+        //                 'buildNumber'    : buildInfo.number,
+        //                 'failBuild'      : true
+        //             ]
+        //             def scanResult = server.xrayScan scanConfig
+        //             echo scanResult as String
+        //         }
+        //     }
+        // }
         stage('Publish build info') {
             steps {
                 jf 'rt build-publish'
