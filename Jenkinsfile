@@ -8,6 +8,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE_NAME = "darshankd.jfrog.io/dkd-spring-petclinic-docker/pet-clinic-container-image"
+        // SERVER_ID = "darshankd"
     }
 
     stages {
@@ -17,25 +18,22 @@ pipeline {
                     url: 'https://github.com/darshandkd/spring-petclinic.git'
             }
         }
-
+        stage ('Artifactory configuration') {
+            server = Artifactory.server SERVER_ID
+            buildInfo = Artifactory.newBuildInfo()
+        }
+        stage ('Publish build info') {
+            server.publishBuildInfo buildInfo
+        }
         stage('Build') {
             steps {
                 sh './mvnw -B -DskipTests clean'
             }
         }
-
         stage('Execute tests') {
             steps {
                 sh './mvnw test'
                 junit 'target/surefire-reports/*.xml'
-            }
-        }
-        
-        stage('OWASP Check-1') {
-            steps {
-                    // Run the OWASP Dependency-Check
-                    dependencyCheck additionalArguments: "-s './' -f 'XML' --failOnCVSS 5 --prettyPrint -o 'dependency-check-1-report.xml'", odcInstallation: "OWASP" // This will fail the build if a CVSS score of 5 or higher is found
-                    dependencyCheckPublisher pattern: 'dependency-check-1-report.xml'
             }
         }
         stage('Bundle app') {
@@ -50,11 +48,11 @@ pipeline {
             }
         }
         
-        stage('OWASP Check-2') {
+        stage('OWASP Depedency check') {
             steps {
                     // Run the OWASP Dependency-Check
-                    dependencyCheck additionalArguments: "-s './' -f 'XML' --failOnCVSS 5 --prettyPrint -o 'dependency-check-2-report.xml'", odcInstallation: "OWASP" // This will fail the build if a CVSS score of 5 or higher is found
-                    dependencyCheckPublisher pattern: 'dependency-check-2-report.xml'
+                    dependencyCheck additionalArguments: "-s './' -f 'ALL' --failOnCVSS 5 --prettyPrint", odcInstallation: "OWASP" // This will fail the build if a CVSS score of 5 or higher is found
+                    dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         }
 
@@ -68,7 +66,15 @@ pipeline {
                 }
             }
         }
-
+        stage ('Xray scan') {
+            def scanConfig = [
+                    'buildName'      : buildInfo.name,
+                    'buildNumber'    : buildInfo.number,
+                    'failBuild'      : true
+            ]
+            def scanResult = server.xrayScan scanConfig
+            echo scanResult as String
+        }
         stage('Publish build info') {
             steps {
                 jf 'rt build-publish'
