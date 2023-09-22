@@ -8,7 +8,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE_NAME = "darshankd.jfrog.io/dkd-spring-petclinic-docker/pet-clinic-container-image"
-        SERVER_ID = "darshankd"
+        // SERVER_ID = "darshankd"
     }
 
     stages {
@@ -19,8 +19,14 @@ pipeline {
             }
         }
         stage ('Artifactory configuration') {
-            server = Artifactory.server SERVER_ID
-            buildInfo = Artifactory.newBuildInfo()
+            // server = Artifactory.server SERVER_ID
+            //buildInfo = Artifactory.newBuildInfo()
+            steps {
+                script {
+                    server = Artifactory.server(SERVER_ID)
+                    buildInfo = Artifactory.newBuildInfo()
+                }
+            }
         }
         stage ('Publish build info') {
             server.publishBuildInfo buildInfo
