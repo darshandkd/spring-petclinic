@@ -29,7 +29,13 @@ pipeline {
             }
         }
         stage ('Publish build info') {
-            server.publishBuildInfo buildInfo
+            steps {
+                script {
+                    server = Artifactory.server(SERVER_ID)
+                    buildInfo = Artifactory.newBuildInfo()
+                    server.publishBuildInfo buildInfo
+                }
+            }
         }
         stage('Build') {
             steps {
