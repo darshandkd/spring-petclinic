@@ -18,13 +18,13 @@ pipeline {
                     url: 'https://github.com/darshandkd/spring-petclinic.git'
             }
         }
-        stage ('Artifactory configuration') {
-            server = Artifactory.server SERVER_ID
-            buildInfo = Artifactory.newBuildInfo()
-        }
-        stage ('Publish build info') {
-            server.publishBuildInfo buildInfo
-        }
+        // stage ('Artifactory configuration') {
+        //     server = Artifactory.server SERVER_ID
+        //     buildInfo = Artifactory.newBuildInfo()
+        // }
+        // stage ('Publish build info') {
+        //     server.publishBuildInfo buildInfo
+        // }
         stage('Build') {
             steps {
                 sh './mvnw -B -DskipTests clean'
@@ -66,15 +66,15 @@ pipeline {
                 }
             }
         }
-        stage ('Xray scan') {
-            def scanConfig = [
-                    'buildName'      : buildInfo.name,
-                    'buildNumber'    : buildInfo.number,
-                    'failBuild'      : true
-            ]
-            def scanResult = server.xrayScan scanConfig
-            echo scanResult as String
-        }
+        // stage ('Xray scan') {
+        //     def scanConfig = [
+        //             'buildName'      : buildInfo.name,
+        //             'buildNumber'    : buildInfo.number,
+        //             'failBuild'      : true
+        //     ]
+        //     def scanResult = server.xrayScan scanConfig
+        //     echo scanResult as String
+        // }
         stage('Publish build info') {
             steps {
                 jf 'rt build-publish'
