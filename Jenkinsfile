@@ -79,13 +79,19 @@ pipeline {
             }
         }
         stage ('Xray scan') {
-            def scanConfig = [
-                    'buildName'      : buildInfo.name,
-                    'buildNumber'    : buildInfo.number,
-                    'failBuild'      : true
-            ]
-            def scanResult = server.xrayScan scanConfig
-            echo scanResult as String
+            steps {
+                script {
+                    server = Artifactory.server(SERVER_ID)
+                    buildInfo = Artifactory.newBuildInfo()
+                    def scanConfig = [
+                        'buildName'      : buildInfo.name,
+                        'buildNumber'    : buildInfo.number,
+                        'failBuild'      : true
+                    ]
+                    def scanResult = server.xrayScan scanConfig
+                    echo scanResult as String
+                }
+            }
         }
         stage('Publish build info') {
             steps {
