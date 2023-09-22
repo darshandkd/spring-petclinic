@@ -33,7 +33,7 @@ pipeline {
                 script {
                     // server = Artifactory.server(SERVER_ID)
                     buildInfo = Artifactory.newBuildInfo()
-                    server.publishBuildInfo buildInfo
+                    // server.publishBuildInfo buildInfo
                 }
             }
         }
