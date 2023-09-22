@@ -56,7 +56,7 @@ pipeline {
 
         stage('Build image') {
             steps {
-                sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=$DOCKER_IMAGE_NAME -Dspring-boot.build-image.imageTag=$env.BUILD_NUMBER'
+                sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=$DOCKER_IMAGE_NAME'
             }
         }
         
@@ -73,6 +73,7 @@ pipeline {
                 dir('jFrog-demo') {
                     // Scan Docker image for vulnerabilities
                     jf "docker scan $DOCKER_IMAGE_NAME"
+                    jf "docker tag $DOCKER_IMAGE_NAME $DOCKER_IMAGE_NAME:$env.BUILD_NUMBER"
                     // Push image to Artifactory
                     jf "docker push $DOCKER_IMAGE_NAME:$env.BUILD_NUMBER"
                 }
