@@ -82,7 +82,7 @@ pipeline {
             steps {
                 script {
                     // server = Artifactory.server(SERVER_ID)
-                    serverId :   "server",
+                    serverId =   "server"
                     buildInfo = Artifactory.newBuildInfo()
                     def scanConfig = [
                         'buildName'      : buildInfo.name,
