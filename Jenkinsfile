@@ -5,10 +5,8 @@ pipeline {
         jdk 'jdk17'
         jfrog 'jfrog-cli'
     }
-
     environment {
         DOCKER_IMAGE_NAME = "darshankd.jfrog.io/dkd-spring-petclinic-docker/pet-clinic-container-image"
-        // SERVER_ID = "darshankd"
     }
 
     stages {
@@ -18,42 +16,22 @@ pipeline {
                     url: 'https://github.com/darshandkd/spring-petclinic.git'
             }
         }
-        // stage ('Artifactory configuration') {
-        //     // server = Artifactory.server SERVER_ID
-        //     //buildInfo = Artifactory.newBuildInfo()
-        //     steps {
-        //         script {
-        //             // server = Artifactory.server(SERVER_ID)
-        //             buildInfo = Artifactory.newBuildInfo()
-        //         }
-        //     }
-        // }
-        // stage ('Publish x-ray info') {
-        //     steps {
-        //         script {
-        //             // server = Artifactory.server(SERVER_ID)
-        //             buildInfo = Artifactory.newBuildInfo()
-        //             // server.publishBuildInfo buildInfo
-        //         }
-        //     }
-        // }
         stage('Build') {
             steps {
                 sh './mvnw -B -DskipTests clean'
             }
         }
-        // stage('Execute tests') {
-        //     steps {
-        //         sh './mvnw test'
-        //         junit 'target/surefire-reports/*.xml'
-        //     }
-        // }
+        stage('Execute tests') {
+            steps {
+                sh './mvnw test'
+                junit 'target/surefire-reports/*.xml'
+            }
+        }
         stage('Bundle app') {
             steps {
                 sh './mvnw package'
             }
         }
-
         stage('Build image') {
             steps {
                 sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=$DOCKER_IMAGE_NAME'
@@ -67,34 +45,24 @@ pipeline {
                     dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         }
-
-        stage('Scan and push image') {
+        stage('Scan image with jFrog X-ray') {
             steps {
                 dir('jFrog-demo') {
                     // Scan Docker image for vulnerabilities
                     jf "docker scan $DOCKER_IMAGE_NAME"
+                }
+            }
+        }
+        stage('Push image') {
+            steps {
+                dir('jFrog-demo') {
+                    // tagging image with latest build number
                     jf "docker tag $DOCKER_IMAGE_NAME:latest $DOCKER_IMAGE_NAME:$env.BUILD_NUMBER"
                     // Push image to Artifactory
                     jf "docker push $DOCKER_IMAGE_NAME:$env.BUILD_NUMBER"
                 }
             }
         }
-        // stage ('Xray scan') {
-        //     steps {
-        //         script {
-        //             // server = Artifactory.server(SERVER_ID)
-        //             serverId =   "server"
-        //             buildInfo = Artifactory.newBuildInfo()
-        //             def scanConfig = [
-        //                 'buildName'      : buildInfo.name,
-        //                 'buildNumber'    : buildInfo.number,
-        //                 'failBuild'      : true
-        //             ]
-        //             def scanResult = server.xrayScan scanConfig
-        //             echo scanResult as String
-        //         }
-        //     }
-        // }
         stage('Publish build info') {
             steps {
                 jf 'rt build-publish'
