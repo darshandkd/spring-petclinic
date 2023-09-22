@@ -45,7 +45,7 @@ pipeline {
                     dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         }
-        stage('Scan image with jFrog X-ray') {
+        stage('jFrog X-ray scan') {
             steps {
                 dir('jFrog-demo') {
                     // Scan Docker image for vulnerabilities
