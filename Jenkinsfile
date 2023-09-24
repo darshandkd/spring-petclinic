@@ -16,7 +16,7 @@ pipeline {
                     url: 'https://github.com/darshandkd/spring-petclinic.git'
             }
         }
-        stage('Build') {
+        stage('Build app') {
             steps {
                 sh './mvnw -B -DskipTests clean'
             }
@@ -32,13 +32,13 @@ pipeline {
                 sh './mvnw package'
             }
         }
-        stage('Build image') {
+        stage('Build docker image') {
             steps {
                 sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=$DOCKER_IMAGE_NAME'
             }
         }
         
-        stage('OWASP Depedency check') {
+        stage('OWASP dep. check') {
             steps {
                     // Run the OWASP Dependency-Check
                     dependencyCheck additionalArguments: "-s './' -f 'ALL' --prettyPrint", odcInstallation: "OWASP"
@@ -53,7 +53,7 @@ pipeline {
                 }
             }
         }
-        stage('Push image') {
+        stage('Push image to jFrog') {
             steps {
                 dir('jFrog-demo') {
                     // tagging image with latest build number
