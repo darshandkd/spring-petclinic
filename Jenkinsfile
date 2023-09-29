@@ -11,28 +11,33 @@ pipeline {
 
     stages {
         stage('Clone repo') {
+            // Clonning the Github repo "Main" branch to the target directory
             steps {
                 git branch: 'main',
                     url: 'https://github.com/darshandkd/spring-petclinic.git'
             }
         }
         stage('Build app') {
+            // Preparing the environment, cleaning up previous artifacts if exist.
             steps {
                 sh './mvnw -B -DskipTests clean'
             }
         }
         stage('Execute tests') {
+            // After the app is built, execting tests
             steps {
                 sh './mvnw test'
                 junit 'target/surefire-reports/*.xml'
             }
         }
         stage('Bundle app') {
+            // After successful tests, bundling the compiled app as JAR
             steps {
                 sh './mvnw package'
             }
         }
         stage('Build docker image') {
+            // Building the Docker image of the JAR file for easy distribution
             steps {
                 sh './mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=$DOCKER_IMAGE_NAME'
             }
@@ -64,6 +69,7 @@ pipeline {
             }
         }
         stage('Publish build info') {
+            // Punlishing the build information to jFrog
             steps {
                 jf 'rt build-publish'
             }
